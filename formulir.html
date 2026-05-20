@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesan untuk Orang Tua</title>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #e67e22;
+            --bg: #f8f9fa;
+            --card: #ffffff;
+            --text: #333333;
+            --text-light: #666666;
+            --border: #e0e0e0;
+            --success: #27ae60;
+            --error: #e74c3c;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            color: var(--primary);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .header .subtitle {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-top: 8px;
+        }
+
+        .heart-icon {
+            color: var(--accent);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .form-card {
+            background: var(--card);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .form-group label .required {
+            color: var(--error);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: var(--bg);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: var(--card);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #aaa;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(44, 62, 80, 0.3);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+        }
+
+        .status-message.success {
+            display: block;
+            background: #d5f4e6;
+            color: var(--success);
+        }
+
+        .status-message.error {
+            display: block;
+            background: #fadbd8;
+            color: var(--error);
+        }
+
+        .icon-love {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        @media (max-width: 480px) {
+            .form-card {
+                padding: 25px;
+            }
+            
+            .header h1 {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="heart-icon">♥</div>
+            <h1>PESAN UNTUK ORANG TUA</h1>
+            <p class="subtitle">Sampaikan rasa cinta dan kasih sayangmu</p>
+        </div>
+
+        <div class="form-card">
+            <form id="pesananForm">
+                <!-- Nama Lengkap -->
+                <div class="form-group">
+                    <label for="nama">
+                        Nama Lengkap <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="nama" 
+                        name="nama" 
+                        placeholder="Masukkan nama lengkap Anda"
+                        required
+                    >
+                </div>
+
+                <!-- Pesan Singkat -->
+                <div class="form-group">
+                    <label for="pesanSingkat">
+                        Pesan Singkat <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="pesanSingkat" 
+                        name="pesan_singkat" 
+                        placeholder="Contoh: Aku sayang Ibu dan Ayah selalu!"
+                        required
+                    >
+                </div>
+
+                <!-- Surat untuk Orang Tua -->
+                <div class="form-group">
+                    <label for="surat">
+                        Surat untuk Orang Tua <span class="required">*</span>
+                    </label>
+                    <textarea 
+                        id="surat" 
+                        name="surat" 
+                        placeholder="Tuliskan perasaan atau surat untuk orang tua tercinta..."
+                        required
+                    ></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    Kirim Pesan ♥
+                </button>
+
+                <div class="status-message" id="statusMessage"></div>
+            </form>
+        </div>
+        
+        <div class="icon-love">
+            <span>♥</span>
+            <span>♥</span>
+            <span>♥</span>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // ✅ INISIALISASI EMAILJS (benar)
+        // ============================================
+        
+        (function() {
+            // Public Key kamu
+            emailjs.init("Pwc_LUA0iMu2BqMri");
+        })();
+
+        // ============================================
+        // ✅ EVENT LISTENER UNTUK FORM SUBMIT
+        // ============================================
+        
+document.getElementById('pesananForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const btn = document.getElementById('submitBtn');
+    const status = document.getElementById('statusMessage');
+
+    const formData = {
+        nama: document.getElementById('nama').value,
+        pesan_singkat: document.getElementById('pesanSingkat').value,
+        surat: document.getElementById('surat').value,
+        tanggal: new Date().toLocaleDateString('id-ID', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        })
+    };
+
+    // Validasi nama minimal 2 karakter
+    if (formData.nama.trim().length < 2) {
+        alert("Nama harus diisi minimal 2 karakter");
+        return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Mengirim... ♥';
+    status.className = 'status-message';
+    status.style.display = 'none';
+
+    emailjs.send("service_nfypfx7", "template_8mftwln", formData)
+        .then(function(response) {
+            status.textContent = '✓ Pesan berhasil terkirim! Terima kasih atas pesanmu.';
+            status.className = 'status-message success';
+            document.getElementById('pesananForm').reset();
+        })
+        .catch(function(error) {
+            status.textContent = '✗ Gagal mengirim pesan. Silakan coba lagi.';
+            status.className = 'status-message error';
+            console.error('Error:', error);
+        })
+        .finally(function() {
+            btn.disabled = false;
+            btn.textContent = 'Kirim Pesan ♥';
+        });
+});
+    </script>
+</body>
+</html>
